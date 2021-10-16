@@ -27,10 +27,12 @@ class updateInventoryRequest extends FormRequest
     {
         return [
             //
+            'id'=>'required',
             'instrument_name' =>'required',
             'instrument_model'=>'required',
             'instrument_tatal'=>'required',
             'instrument_quantityBorrow'=>'required',
+            'instrument_enclosure'=>'required',
         ];
     } protected function failedValidation(Validator $validator)
 {

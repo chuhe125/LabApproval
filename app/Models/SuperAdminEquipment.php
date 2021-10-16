@@ -18,7 +18,12 @@ class SuperAdminEquipment extends Model
     public static function yjx_equipmentSearch($request){
         $id=$request['id'];
         try {
-            $res = self::select("id","form_id","student_name","equipment_time1")->where('id',$id)->get();
+            $res1= self::select("id","student_name","equipment_time1")->where('id',$id)->get();
+            $step=self::where('id',$id)->value('form_id');
+            $step2=SuperAdminForm::where('id',$step)->value('form_name_id');
+            $res2=SuperAdminFormName::select('form_name')->where('id',$step2)->get();
+            $res['res1']=$res1;
+            $res['res2']=$res2;
             return $res ?
                 $res :
                 false;
@@ -33,7 +38,10 @@ class SuperAdminEquipment extends Model
      */
     public static function yjx_equipmentShow(){
         try {
-            $res=self::select("id","form_id","student_name","equipment_time1")->get();
+            $res=self::select("id","student_name","equipment_time1")->get();
+//            $res=self::join('form','form.id','=','form_id')
+//                ->select("id","form.form_name_id","student_name","equipment_time1")
+//                ->get();
 
             return $res?
                 $res :
@@ -56,7 +64,7 @@ class SuperAdminEquipment extends Model
                 join('instrument', 'instrument.id', '=', 'instrument_id')
                     ->where("instrument.id",$res3[$i])
                     ->where('equipment_id',$id)
-                    ->select('instrument_id','instrument.instrument_name','instrument.instrument_model',
+                    ->select('instrument.id','instrument.instrument_name','instrument.instrument_model',
                         'eqp_equipment_quantity','eqp_equipment_enclosure')->get();
             }
             return $res?
@@ -110,7 +118,6 @@ class SuperAdminEquipment extends Model
                     ->where("instrument.id",$request['id'][$i])
 //                ->where('instrument_id',"instrument.id")
                     ->value('eqp_equipment_quantity');
-
                 $step2=SuperAdminInventory::where('id',$request['id'][$i])->value('instrument_quantity');
                 $step3=$step1+$step2;
                 $step4=SuperAdminEqp_equipment::where('instrument_id',$request['id'][$i])->delete();

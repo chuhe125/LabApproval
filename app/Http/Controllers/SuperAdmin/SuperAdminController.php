@@ -157,6 +157,11 @@ class SuperAdminController extends Controller
             json_success('操作成功!', $res, 200) :
             json_fail('操作失败!', null, 100);
     }
+
+
+
+
+
     /***
      * 设备管理
      * 设备归还-查看

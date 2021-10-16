@@ -30,6 +30,7 @@ class addInventoryRequest extends FormRequest
             'instrument_name'=>'required',
             'instrument_model'=>'required',
             'instrument_tatal'=>'required',
+            'instrument_enclosure'=>'required',
 
         ];
     } protected function failedValidation(Validator $validator)

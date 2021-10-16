@@ -19,7 +19,8 @@ class SuperAdminInventory extends Model
      */
     public static function yjx_queryAllInventory(){
         try {
-            $res = self::select()->get();
+            $res = self::select("id", "instrument_name", "instrument_model",
+            "instrument_quantity", "instrument_tatal", "instrument_enclosure")->get();
             return $res ?
                 $res :
                 false;
@@ -40,7 +41,8 @@ class SuperAdminInventory extends Model
                      'instrument_name'=>$request['instrument_name'],
                      'instrument_model'=>$request['instrument_model'],
                      'instrument_tatal'=>$request['instrument_tatal'],
-                     'instrument_quantity'=>$request['instrument_tatal']
+                     'instrument_quantity'=>$request['instrument_tatal'],
+                     'instrument_enclosure'=>$request['instrument_enclosure']
                  ]
              );
              return $res ?
@@ -59,12 +61,14 @@ class SuperAdminInventory extends Model
     public static function yjx_updateInventory($request){
         try {
             $instrument_quantity=$request['instrument_tatal']-$request['instrument_quantityBorrow'];
+
             $res = self::where( 'id',$request['id'])->update(
                 [
                     'instrument_name'=>$request['instrument_name'],
                     'instrument_model'=>$request['instrument_model'],
                     'instrument_tatal'=>$request['instrument_tatal'],
-                    'instrument_quantity'=>$instrument_quantity
+                    'instrument_quantity'=>$instrument_quantity,
+                    'instrument_enclosure'=>$request['instrument_enclosure']
                 ]
             );
             return $res ?

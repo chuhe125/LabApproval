@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class SuperAdminForm extends Model
 {
-    //
+    //form 表
     protected $table = "form";
     public $timestamps = true;
     protected $primaryKey = "id";
@@ -204,35 +204,41 @@ class SuperAdminForm extends Model
         $step1=$request['form_name_id'];
         $step2=$request['id'];
         try {
-            if ($step1==1){
-                $res=SuperAdminMove::select()->where('form_id',$step2)->get();
-            }elseif ($step1==2){
-                $res=SuperAdminBorrow::select()->where('form_id',$step2)->get();
-            }elseif ($step1==3){
-                $res1=SuperAdminDevelop::select("development_reason1", "development_name",
-                "development_time1", "development_time2", "development_applicant")->where('form_id',$step2)->get();
-                $res2=SuperAdminDevelop::where('form_id',$step2)->value('id');
-                $res3=SuperAdminDev_apply::select("student_name", "student_job_number",
-                "student_phone", "undertake_work")->where('development_id',$res2)->get();
-                $res['res1']=$res1;
-                $res['res2']=$res3;
-            }else{
-                $res1=SuperAdminEquipment::select("equipment_department", "equipment_purpose",
-            "equipment_time1", "equipment_time2", "student_name", "student_phone")->where('form_id',$step2)->get();
-                $res2=SuperAdminEquipment::where('form_id',$step2)->value('id');
+                if ($step1==1){
+                    $res=SuperAdminMove::select("id", "move_week", "move_class", "student_name",
+                "move_people", "move_name", "move_type", "move_teacher", "move_move", "move_remarks"
+                )->where('form_id',$step2)->get();
+                }elseif ($step1==2){
+                    $res=SuperAdminBorrow::select( "borrow_date", "borrow_name", "borrow_number", "borrow_course",
+                "borrow_class", "borrow_objective", "borrow_time1", "borrow_time2", "borrow_promise",
+                        "borrow_applicant", "borrow_telephone"
+    )->where('form_id',$step2)->get();
+                }elseif ($step1==3){
+                    $res1=SuperAdminDevelop::select("development_reason1", "development_name",
+                    "development_time1", "development_time2", "development_applicant")->where('form_id',$step2)->get();
+                    $res2=SuperAdminDevelop::where('form_id',$step2)->value('id');
+                    $res3=SuperAdminDev_apply::select("student_name", "student_job_number",
+                    "student_phone", "undertake_work")->where('development_id',$res2)->get();
+                    $res['res1']=$res1;
+                    $res['res2']=$res3;
+                }else{
+                    $res1=SuperAdminEquipment::select("equipment_department", "equipment_purpose",
+                "equipment_time1", "equipment_time2", "student_name", "student_phone")->where('form_id',$step2)->get();
+    //                dd($res1);
+                    $res2=SuperAdminEquipment::where('form_id',$step2)->value('id');
 
-                $res3=SuperAdminEqp_equipment::where('equipment_id',$res2)->pluck('instrument_id');
-                for($i=0;$i<count($res3);$i++){
-                    $res4[$i]=SuperAdminEqp_equipment::
-                    join('instrument', 'instrument.id', '=', 'instrument_id')
-                        ->where("instrument.id",$res3[$i])
-                        ->where('equipment_id',$res2)
-                        ->select('instrument.instrument_name','instrument.instrument_model',
-                            'eqp_equipment_quantity','eqp_equipment_enclosure')->get();
-                }
+                    $res3=SuperAdminEqp_equipment::where('equipment_id',$res2)->pluck('instrument_id');
+                    for($i=0;$i<count($res3);$i++){
+                        $res4[$i]=SuperAdminEqp_equipment::
+                        join('instrument', 'instrument.id', '=', 'instrument_id')
+                            ->where("instrument.id",$res3[$i])
+                            ->where('equipment_id',$res2)
+                            ->select('instrument.instrument_name','instrument.instrument_model',
+                                'eqp_equipment_quantity','eqp_equipment_enclosure')->get();
+                    }
 
-                $res['res1']=$res1;
-                $res['res2']=$res4;
+                    $res['res1']=$res1;
+                    $res['res2']=$res4;
 
             }
 
@@ -308,13 +314,40 @@ class SuperAdminForm extends Model
             $step2=$request['id'];
             try {
                 if ($step1==1){
-                    $res=SuperAdminMove::select()->where('form_id',$step2)->get();
+                    $res=SuperAdminMove::select("id", "move_week", "move_class", "student_name",
+                        "move_people", "move_name", "move_type", "move_teacher", "move_move", "move_remarks"
+                    )->where('form_id',$step2)->get();
                 }elseif ($step1==2){
-                    $res=SuperAdminBorrow::select()->where('form_id',$step2)->get();
+                    $res=SuperAdminBorrow::select( "borrow_date", "borrow_name", "borrow_number", "borrow_course",
+                        "borrow_class", "borrow_objective", "borrow_time1", "borrow_time2", "borrow_promise",
+                        "borrow_applicant", "borrow_telephone"
+                    )->where('form_id',$step2)->get();
                 }elseif ($step1==3){
-                    $res=SuperAdminDevelop::select()->where('form_id',$step2)->get();
+                    $res1=SuperAdminDevelop::select("development_reason1", "development_name",
+                        "development_time1", "development_time2", "development_applicant")->where('form_id',$step2)->get();
+                    $res2=SuperAdminDevelop::where('form_id',$step2)->value('id');
+                    $res3=SuperAdminDev_apply::select("student_name", "student_job_number",
+                        "student_phone", "undertake_work")->where('development_id',$res2)->get();
+                    $res['res1']=$res1;
+                    $res['res2']=$res3;
                 }else{
-                    $res=SuperAdminEquipment::select()->where('form_id',$step2)->get();
+                    $res1=SuperAdminEquipment::select("equipment_department", "equipment_purpose",
+                        "equipment_time1", "equipment_time2", "student_name", "student_phone")->where('form_id',$step2)->get();
+                    //                dd($res1);
+                    $res2=SuperAdminEquipment::where('form_id',$step2)->value('id');
+
+                    $res3=SuperAdminEqp_equipment::where('equipment_id',$res2)->pluck('instrument_id');
+                    for($i=0;$i<count($res3);$i++){
+                        $res4[$i]=SuperAdminEqp_equipment::
+                        join('instrument', 'instrument.id', '=', 'instrument_id')
+                            ->where("instrument.id",$res3[$i])
+                            ->where('equipment_id',$res2)
+                            ->select('instrument.instrument_name','instrument.instrument_model',
+                                'eqp_equipment_quantity','eqp_equipment_enclosure')->get();
+                    }
+
+                    $res['res1']=$res1;
+                    $res['res2']=$res4;
                 }
             return $res ?
                 $res :
